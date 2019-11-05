@@ -2,11 +2,6 @@ const chalk = require('chalk');
 
 const Sequelize = require('sequelize');
 
-const DBname = `tp_supervision`;
-const DBuser = `postgres`;
-const DBpassword = `postgres`;
-const DBhost = `192.168.10.107`;
-const DBport = 5432;
 const DBURL = `postgres://postgres:postgres@192.168.10.107:5432/tp_supervision`;
 
 const sequelize = new Sequelize(DBURL, {

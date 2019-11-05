@@ -27,5 +27,11 @@ app.get('/osjson', (request, response) => { //Should return JSON logs in REST AP
 
 });
 
+app.get('/osjson/:delimiter', (request, response) => {
+    apiMethods.selectOsMetrics(request.params.delimiter)
+        .then( data => response.json(data) )
+        .catch( (error) => console.log(chalk.red("Erreur dans l'API OS/Delimeter")) );
+});
+
 const server = app.listen(8060);
 

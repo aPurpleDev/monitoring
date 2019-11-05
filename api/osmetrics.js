@@ -39,8 +39,19 @@ const getOsMetrics = async () => { //get OS metrics of client and sends to contr
     module.exports.metrics = metrics;
 };
 
-const selectOsMetrics = () => {
-    dbMethods.osModel.findAll({limit: 5, raw: true}).then( (data) => console.log(chalk.yellow("Select method"),data));
+const selectOsMetrics = async (limiter) => {
+    const data = await dbMethods.osModel.findAll({limit: limiter, raw: true});
+
+    let os_JSONlogs = { "success":true , "message":`last ${limiter} logs in database` };
+    let arrayLogs = [];
+
+    for(let entry of data)
+    {
+        arrayLogs.push(entry);
+    }
+    os_JSONlogs.data = arrayLogs;
+
+    return os_JSONlogs;
 };
 
 const selectOsJSON = async () => {
