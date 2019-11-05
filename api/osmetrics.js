@@ -1,8 +1,9 @@
 const osutils = require('os-utils');
 const chalk = require('chalk');
-
 const osu = require('node-os-utils');
-const cpu = osu.cpu
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+const cpu = osu.cpu;
 
 const dbMethods = require('../api/dbhandler');
 
@@ -69,9 +70,24 @@ const selectOsJSON = async () => {
     return os_JSONlogs;
 };
 
+const findUsageAbove = async (cutoff) => { //actually returns value Equal OR Above
+    let os_JSONlogs = { "success":true , "message":`record of CPU with usage equal or higher than ${cutoff}`};
+    let arrayLogs = [];
+
+    const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']], where: { cpuUsage: { [Op.gte]: cutoff} }} );
+
+    for(let entry of data){
+        arrayLogs.push(entry);
+    }
+
+    os_JSONlogs.data = arrayLogs;
+
+    return os_JSONlogs;
+};
+
 module.exports.getOsMetrics = getOsMetrics;
 module.exports.selectOsMetrics = selectOsMetrics;
 module.exports.selectOsJSON = selectOsJSON;
-
+module.exports.findUsageAbove = findUsageAbove;
 
 
