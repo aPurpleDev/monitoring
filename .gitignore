@@ -1,4 +1,3 @@
 # Project exclude paths
 .idea
-/api/node_modules/
-/controller/node_modules/
+/node_modules/
