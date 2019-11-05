@@ -21,16 +21,11 @@ app.get('/oslog', (request, response) => { //Sends a query to findAll last 5 osm
 
 app.get('/osjson', (request, response) => { //Should return JSON logs in REST API format
 
-    let initlog = async function(){
-    const logs = await apiMethods.selectOsJSON();
-    response.json(logs);
-    };
-
-    initlog();
+    apiMethods.selectOsJSON().then( data => {
+        response.json(data);
+    }).catch( e => console.log(e));
 
 });
-
-
 
 const server = app.listen(8060);
 

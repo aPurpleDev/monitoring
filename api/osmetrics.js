@@ -48,12 +48,12 @@ const selectOsJSON = async () => {
     let arrayLogs = [];
 
     const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']]} );
-        for(let entry of data)
-        {
-            arrayLogs.push(entry);
-        }
-        os_JSONlogs.data = arrayLogs;
-        console.log('REST API DATA:', os_JSONlogs);
+
+    for(let entry of data)
+    {
+        arrayLogs.push(entry);
+    }
+    os_JSONlogs.data = arrayLogs;
 
     return os_JSONlogs;
 };
