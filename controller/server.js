@@ -1,15 +1,36 @@
 const express = require('express');
-
 const apiMethods = require('../api/osmetrics');
-
 const app = express();
-const server = app.listen(8060);
 
-app.get('/', (request, response) => { //récupérer déjà les metrics du client pour commencer
-    response.writeHead(200);
+app.set('view engine', 'ejs');
+setInterval(() =>  apiMethods.getOsMetrics(), 5000);
 
-    apiMethods.getOsMetrics();
+app.get('/', (request, response) => { //Placeholder view
+    response.render('index.ejs');
 
-    response.end('test of backend');
+    response.end('test of backend - end');
 });
+
+app.get('/oslog', (request, response) => { //Sends a query to findAll last 5 osmetrics entry in database
+    response.render('index.ejs');
+
+    apiMethods.selectOsMetrics();
+
+    response.end('oslog route - end');
+});
+
+app.get('/osjson', (request, response) => { //Should return JSON logs in REST API format
+
+    let initlog = async function(){
+    const logs = await apiMethods.selectOsJSON();
+    response.json(logs);
+    };
+
+    initlog();
+
+});
+
+
+
+const server = app.listen(8060);
 

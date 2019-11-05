@@ -1,31 +1,66 @@
 const osutils = require('os-utils');
 const chalk = require('chalk');
 
-const getOsMetrics = () => { //get OS metrics of client and sends to controller
+const osu = require('node-os-utils');
+const cpu = osu.cpu
 
-    let metrics = {
-    };
+const dbMethods = require('../api/dbhandler');
 
-    osutils.cpuUsage( (data) => {
-        console.log(chalk.green(`Current CPU Usage : ${data * 100} %`));
-        metrics.cpuUsage = data * 100;
-    });
+const getOsMetrics = async () => { //get OS metrics of client and sends to controller
 
-    osutils.cpuFree( (data) => {
-        console.log(chalk.green(`Current CPU Free : ${data * 100} %`));
-        metrics.cpuFree = data * 100;
-    });
+    dbMethods.initDB();
 
-    console.log(chalk.green(`Current Free Memory : ${osutils.freememPercentage() * 100} %`));
-    metrics.freememPercentage = `Current Free Memory : ${osutils.freememPercentage() * 100} %`;
+    const metrics = {};
 
-    console.log(chalk.green(`Current Memory Used : ${100 - (osutils.freememPercentage() * 100)}`));
-    metrics.usedmemPercentage = `Current Memory Used : ${100 - (osutils.freememPercentage() * 100)}`;
+    await cpu.usage().then((data) => {
+        console.log(chalk.blueBright(`Current CPU Used : ${data}%`));
+        metrics.cpuUsage = data.toFixed(2);
+        console.log(chalk.greenBright(`Current CPU Free : ${100 - data}%`));
+        metrics.cpuFree = (100 - data).toFixed(2);
+    }).catch(error => console.log(chalk.red('Erreur de promesse: cpu usage')));
 
+    console.log(chalk.blueBright(`Current Memory Used : ${100 - (osutils.freememPercentage() * 100)}%`));
+    console.log(chalk.greenBright(`Current Free Memory : ${osutils.freememPercentage() * 100}%`));
+
+    metrics.freememPercentage = (osutils.freememPercentage() * 100).toFixed(2);
+    metrics.usedmemPercentage = (100 - (osutils.freememPercentage() * 100)).toFixed(2);
+
+    console.log(chalk.yellow("Objet PCPM final: "));
     console.log(metrics);
-    setInterval(getOsMetrics,5000); //toutes les 5 secondes
+
+    console.log(chalk.bgBlueBright('Inserting metrics in DB'));
+    dbMethods.osModel.create({
+        cpuUsage: metrics.cpuUsage,
+        cpuFree: metrics.cpuFree,
+        freeMem: metrics.freememPercentage,
+        usedMem: metrics.usedmemPercentage
+    });
+
+    module.exports.metrics = metrics;
 };
 
-module.exports.getOsMetrics = getOsMetrics();
+const selectOsMetrics = () => {
+    dbMethods.osModel.findAll({limit: 5, raw: true}).then( (data) => console.log(chalk.yellow("Select method"),data));
+};
+
+const selectOsJSON = async () => {
+    let os_JSONlogs = { "success":true , "message":"all os logs in database" };
+    let arrayLogs = [];
+
+    const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']]} );
+        for(let entry of data)
+        {
+            arrayLogs.push(entry);
+        }
+        os_JSONlogs.data = arrayLogs;
+        console.log('REST API DATA:', os_JSONlogs);
+
+    return os_JSONlogs;
+};
+
+module.exports.getOsMetrics = getOsMetrics;
+module.exports.selectOsMetrics = selectOsMetrics;
+module.exports.selectOsJSON = selectOsJSON;
+
 
 
