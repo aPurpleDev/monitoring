@@ -1,6 +1,17 @@
 # Monitoring Overview
 
 This is a node training projet who's purpose is to monitor system metrics and serve them in a REST API format.
+The project monitors CPU usage and HDD memory usage. 
+Every 5 seconds, it inserts the data in a Postgres database. 
+Various routes documented below allows user to fetch data. 
+
+Further functionalities are pending implementation. 
+
+# Setup
+
+Once the folder is cloned, run npm install on the project root folder to get all dependency modules. 
+Run npm start at the root project folder to launch the start script. 
+Server will run at localhost:8060.
 
 # Routes
 
