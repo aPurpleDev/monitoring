@@ -48,7 +48,8 @@ app.get('/osjson/date/:startdate/:enddate', (request, response) => { //Returns O
         .catch( (error) => console.log(chalk.red("Error in API OS/ByDate")) );
 });
 
-app.put('osjson/deleteOSrecords', (request,response) => {
+app.put('/osdata/delete', (request,response) => {
+    response.send({type : 'PUT'});
     dbMethods.wipeOsTable().then(response.redirect('/'));
 });
 
