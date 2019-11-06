@@ -49,7 +49,7 @@ app.get('/osjson/date/:startdate/:enddate', (request, response) => { //Returns O
 });
 
 app.put('/osdata/delete', (request,response) => {
-    response.send({type : 'PUT'});
+    response.send({type : 'PUT', message : 'Deletion of OS Data Table done'});
     dbMethods.wipeOsTable().then(response.redirect('/'));
 });
 
