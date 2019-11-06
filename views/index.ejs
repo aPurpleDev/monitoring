@@ -10,7 +10,7 @@
     <title>Performance Monitoring - Softia</title>
 </head>
 
-<body>
+<body style="background-color: yellow">
 <base href="http://localhost:8060/">
 <div>
 
@@ -19,58 +19,36 @@
         <div class="container">
             <h1 class="display-4">Softia Performance Monitoring</h1>
             <p class="lead">This is a Node training project delivering CPU & BDD performance monitoring metrics</p>
-        </div>
-    </div>
-
-
-    <a href="/osjson">
-        <button type="button" class="btn btn-info btn-lg btn-block display-4 text-dark text-center">OS Logs API</button>
-    </a>
-
-<div class="jumbotron jumbotron-fluid bg-info mt-4">
-    <div class="container bg-secondary">
-        <div class="row">
-            <div class="col">
-                <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-                    <div class="card-header"> osmetrics.cpuUsage</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Live % of CPU being used</h5>
-                        <p class="card-text">Your processor's current workload.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
-                    <div class="card-header">osmetrics.cpuFree</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Live % of CPU free to use</h5>
-                        <p class="card-text">Your processor's available processing power.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="w-100">
-            </div>
-            <div class="col">
-                <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
-                    <div class="card-header">osmetrics.usedMem</div>
-                    <div class="card-body">
-                        <h5 class="card-title">% of Used memory on your hard drive</h5>
-                        <p class="card-text">Your HDD's current load.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                    <div class="card-header">osmetrics.freeMem</div>
-                    <div class="card-body">
-                        <h5 class="card-title">% of Free memory on your hard drive</h5>
-                        <p class="card-text">Your HDD's free load.</p>
-                    </div>
-                </div>
+            <div class="text-left ml-3">
+                <a href="/osjson">
+                    <button type="button" class="btn btn-secondary display-4 text-white text-center">All OS Logs from API</button>
+                </a>
             </div>
         </div>
     </div>
-</div>
+
+
+
+    <div class="jumbotron jumbotron-fluid bg-secondary">
+        <div class="container">
+            <h1 class="display-4 text-light">Get the latest X amount of OS metrics logs</h1>
+            <p class="lead text-light">Enter /osjson/(X) in the URL, X being the number of records your want</p>
+        </div>
+    </div>
+
+    <div class="jumbotron jumbotron-fluid bg-info">
+        <div class="container">
+            <h1 class="display-4">Filter records per CPU Usage</h1>
+            <p class="lead">Enter /osjson/cpuusage/(Y) in the URL, Y being the CPU usage to match (greater or equal)</p>
+        </div>
+    </div>
+
+    <div class="jumbotron jumbotron-fluid bg-secondary">
+        <div class="container">
+            <h1 class="display-4 text-white">Filter records per dates</h1>
+            <p class="lead text-white">Enter /osjson/date/(Startdate)/(Enddate) in the URL. Date format recommended YYYY-MM-DD</p>
+        </div>
+    </div>
 
 </body>
 </html>

@@ -43,7 +43,7 @@ const getOsMetrics = async () => { //get OS metrics of client and sends to contr
 const selectOsMetrics = async (limiter) => {
     const data = await dbMethods.osModel.findAll({limit: limiter, raw: true});
 
-    let os_JSONlogs = { "success":true , "message":`last ${limiter} logs in database` };
+    let os_JSONlogs = { "success":true , "message":`Last ${limiter} records in database` };
     let arrayLogs = [];
 
     for(let entry of data)
@@ -56,7 +56,7 @@ const selectOsMetrics = async (limiter) => {
 };
 
 const selectOsJSON = async () => {
-    let os_JSONlogs = { "success":true , "message":"all os logs in database" };
+    let os_JSONlogs = { "success":true , "message":"all OS records in database" };
     let arrayLogs = [];
 
     const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']]} );
@@ -71,10 +71,27 @@ const selectOsJSON = async () => {
 };
 
 const findUsageAbove = async (cutoff) => { //actually returns value Equal OR Above
-    let os_JSONlogs = { "success":true , "message":`record of CPU with usage equal or higher than ${cutoff}`};
+    let os_JSONlogs = { "success":true , "message":`records of CPU usage equal or higher than ${cutoff}`};
     let arrayLogs = [];
 
     const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']], where: { cpuUsage: { [Op.gte]: cutoff} }} );
+
+    for(let entry of data){
+        arrayLogs.push(entry);
+    }
+
+    os_JSONlogs.data = arrayLogs;
+
+    return os_JSONlogs;
+};
+
+const getOsByDates = async(startDate, endDate) => {
+    let jsStartDate = new Date(startDate);
+    let jsEndDate = new Date(endDate);
+    let os_JSONlogs = { "success":true , "message":`records of OS metrics within ${jsStartDate} and ${jsEndDate}`};
+    let arrayLogs = [];
+
+    const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']], where: { createdAt: { [Op.between]: [startDate,endDate]} }} );
 
     for(let entry of data){
         arrayLogs.push(entry);
@@ -89,5 +106,5 @@ module.exports.getOsMetrics = getOsMetrics;
 module.exports.selectOsMetrics = selectOsMetrics;
 module.exports.selectOsJSON = selectOsJSON;
 module.exports.findUsageAbove = findUsageAbove;
-
+module.exports.getOsByDates = getOsByDates;
 

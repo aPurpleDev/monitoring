@@ -47,5 +47,14 @@ const initDB = () => {
     }
 };
 
+const wipeOsTable = async() => {
+    await osModel.destroy( {
+        where: {},
+        truncate: true
+    } );
+    console.log(chalk.green('Table OS wiped from wipeOsTable method'));
+};
+
 module.exports.initDB = initDB;
 module.exports.osModel = osModel;
+module.exports.wipeOsTable = wipeOsTable;
