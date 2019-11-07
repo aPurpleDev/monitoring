@@ -3,9 +3,12 @@ const apiMethods = require('../api/osmetrics');
 const dbMethods = require('../api/dbhandler');
 const dbMonitor = require('../api/dbmetrics');
 const app = express();
+const path = require('path');
+const favicon = require('serve-favicon');
 const chalk = require('chalk');
 
 app.set('view engine', 'ejs');
+app.use(favicon(path.join(__dirname,'favicon','softialogo.ico')));
 setInterval(() =>  apiMethods.getOsMetrics(), 5000);
 
 app.get('/', (request, response) => { //Placeholder view
