@@ -6,7 +6,9 @@ const app = express();
 const path = require('path');
 const favicon = require('serve-favicon');
 const chalk = require('chalk');
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.urlencoded({extended : true}));
 app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname,'favicon','softialogo.ico')));
 setInterval(() =>  apiMethods.getOsMetrics(), 5000);
@@ -52,10 +54,24 @@ app.get('/osjson/date/:startdate/:enddate', (request, response) => { //Returns O
         .catch( (error) => console.log(chalk.red("Error in API OS/ByDate")) );
 });
 
-app.put('/osdata/delete', (request,response) => {
-    response.send({type : 'PUT', message : 'Deletion of OS Data Table'});
-    dbMethods.wipeOsTable().then(response.redirect('/'));
+app.delete('/osdata/delete', (request,response) => {
+    response.send({type : 'DELETE', message : 'Deletion of OS Data Table'});
+    dbMethods.wipeOsTable().then(console.log(chalk.red('DELETE request received')));
 });
+
+app.put('/osdata/splice', (request, response) => {
+    console.log("request received from POSTMAN", request.body);
+    if(request.body.hasOwnProperty('cutoff')){
+        let cutoff = request.body.cutoff;
+        dbMethods.removeOsMetrics(cutoff);
+        console.log(chalk.blueBright(`PUT request deleting oldest ${cutoff} records of osmetrics table`));
+        response.json({'message': `Successfully deleted the ${cutoff} oldest records of osmetrics table`});
+    }else{
+        console.log(request.body);
+        response.send(`No cutoff found, add a "cutoff" key to your request body. Cutoff must be a number`);
+    }
+});
+
 
 app.get('/dbjson', (request, response) => {
     dbMonitor.getDBSizes().

@@ -62,7 +62,8 @@
     <div class="jumbotron jumbotron-fluid bg-info">
         <div class="container">
             <h1 class="display-4 text-dark">Wipe the OS data table</h1>
-            <p class="lead text-dark">Enter /osdata/delete in a PUT request manager. <em class="text-warning">Warning: this will wipe the OS data table.</em></p>
+            <p class="lead text-dark">Enter /osdata/delete in a DELETE request manager. <em class="text-warning">Warning: this will wipe the OS data table.</em></p>
+            <p class="lead text-dark">Enter /osdata/splice in a PUT request manager. <em class="text-warning">Request body must have a 'cutoff' key, its value will be used as cutoff. This will splice the oldest X records in the database, where X = cutoff. The body data must be sent as x-www-form-urlencoded format</em></p>
         </div>
     </div>
 

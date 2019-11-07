@@ -55,7 +55,15 @@ const wipeOsTable = async() => {
     console.log(chalk.green('Table OS wiped from wipeOsTable method'));
 };
 
+const removeOsMetrics = async (cutoff) => {
+    await sequelize.query(`DELETE FROM osmetrics WHERE ctid IN (SELECT ctid FROM osmetrics ORDER BY id LIMIT ${cutoff});`);
+
+    console.log(chalk.bgRedBright(`Deleted oldest ${cutoff} rows from osmetrics table`));
+    return `Deleted oldest ${cutoff} rows from osmetrics table`;
+};
+
 module.exports.initDB = initDB;
 module.exports.osModel = osModel;
 module.exports.wipeOsTable = wipeOsTable;
+module.exports.removeOsMetrics = removeOsMetrics;
 module.exports.sequelize = sequelize;
