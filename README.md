@@ -26,3 +26,7 @@ Note: Please enter date in the YYYY-MM-DD format, also specifiying the time is p
 
 '/osdata/delete': Drops all record from the osModel table.
 Note: this is a PUT request, not accessible by browser. Please use Postman or a similar tool.
+
+'/dbjson': get all collections Names and Sizes from DB
+
+'/dbjson/model' Get Table Index % usage and Rows count
