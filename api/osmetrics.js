@@ -7,47 +7,34 @@ const cpu = osu.cpu;
 
 const dbMethods = require('../api/dbhandler');
 
-const getOsMetrics = async () => { //get OS metrics of client and sends to controller
-
+const getOsMetrics = async () => { //Called upon server starts. Initialize the DB if not online(Singleton). Collects OS metrics from computer and inserts them in the table
     dbMethods.initDB();
 
-    const metrics = {};
+    const metrics = {}; //Stores OS metrics for upcoming insert
 
     await cpu.usage().then((data) => {
-        //console.log(chalk.blueBright(`Current CPU Used : ${data}%`));
         metrics.cpuUsage = data.toFixed(2);
-        //console.log(chalk.greenBright(`Current CPU Free : ${100 - data}%`));
         metrics.cpuFree = (100 - data).toFixed(2);
     }).catch(error => console.log(chalk.red('Erreur de promesse: cpu usage')));
-
-    //console.log(chalk.blueBright(`Current Memory Used : ${100 - (osutils.freememPercentage() * 100)}%`));
-    //console.log(chalk.greenBright(`Current Free Memory : ${osutils.freememPercentage() * 100}%`));
 
     metrics.freememPercentage = (osutils.freememPercentage() * 100).toFixed(2);
     metrics.usedmemPercentage = (100 - (osutils.freememPercentage() * 100)).toFixed(2);
 
-    //console.log(chalk.yellow("Objet PCPM final: "));
-    //console.log(metrics);
-
-    //console.log(chalk.bgBlueBright('Inserting metrics in DB'));
     dbMethods.osModel.create({
         cpuUsage: metrics.cpuUsage,
         cpuFree: metrics.cpuFree,
         freeMem: metrics.freememPercentage,
         usedMem: metrics.usedmemPercentage
     });
-
     module.exports.metrics = metrics;
 };
 
-const selectOsMetrics = async (limiter) => {
+const selectOsMetrics = async (limiter) => { //Select latest X records of osmetrics, where X == limiter
     const data = await dbMethods.osModel.findAll({limit: limiter, raw: true});
-
-    let os_JSONlogs = { "success":true , "message":`Last ${limiter} records in database` };
+    let os_JSONlogs = {"success": true, "message": `Last ${limiter} records in database`};
     let arrayLogs = [];
 
-    for(let entry of data)
-    {
+    for (let entry of data) {
         arrayLogs.push(entry);
     }
     os_JSONlogs.data = arrayLogs;
@@ -55,14 +42,12 @@ const selectOsMetrics = async (limiter) => {
     return os_JSONlogs;
 };
 
-const selectOsJSON = async () => {
-    let os_JSONlogs = { "success":true , "message":"all OS records in database" };
+const selectOsJSON = async () => { //Select all osmetrics records in database
+    let os_JSONlogs = {"success": true, "message": "all OS records in database"};
     let arrayLogs = [];
+    const data = await dbMethods.osModel.findAll({raw: true, order: [['id', 'DESC']]});
 
-    const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']]} );
-
-    for(let entry of data)
-    {
+    for (let entry of data) {
         arrayLogs.push(entry);
     }
     os_JSONlogs.data = arrayLogs;
@@ -70,33 +55,39 @@ const selectOsJSON = async () => {
     return os_JSONlogs;
 };
 
-const findUsageAbove = async (cutoff) => { //actually returns value Equal OR Above
-    let os_JSONlogs = { "success":true , "message":`records of CPU usage equal or higher than ${cutoff}`};
+const findUsageAbove = async (cutoff) => { //Select records where CPU usage was higher or equal than cutoff
+    let os_JSONlogs = {"success": true, "message": `records of CPU usage equal or higher than ${cutoff}`};
     let arrayLogs = [];
 
-    const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']], where: { cpuUsage: { [Op.gte]: cutoff} }} );
+    const data = await dbMethods.osModel.findAll({
+        raw: true,
+        order: [['id', 'DESC']],
+        where: {cpuUsage: {[Op.gte]: cutoff}}
+    });
 
-    for(let entry of data){
+    for (let entry of data) {
         arrayLogs.push(entry);
     }
-
     os_JSONlogs.data = arrayLogs;
 
     return os_JSONlogs;
 };
 
-const getOsByDates = async(startDate, endDate) => {
+const getOsByDates = async (startDate, endDate) => { //Select records that were created inclusively in between (attribute createdAt) startDate and enddate
     let jsStartDate = new Date(startDate);
     let jsEndDate = new Date(endDate);
-    let os_JSONlogs = { "success":true , "message":`records of OS metrics within ${jsStartDate} and ${jsEndDate}`};
+    let os_JSONlogs = {"success": true, "message": `records of OS metrics within ${jsStartDate} and ${jsEndDate}`};
     let arrayLogs = [];
 
-    const data = await dbMethods.osModel.findAll( {raw : true, order: [['id', 'DESC']], where: { createdAt: { [Op.between]: [jsStartDate,jsEndDate]} }} );
+    const data = await dbMethods.osModel.findAll({
+        raw: true,
+        order: [['id', 'DESC']],
+        where: {createdAt: {[Op.between]: [jsStartDate, jsEndDate]}}
+    });
 
-    for(let entry of data){
+    for (let entry of data) {
         arrayLogs.push(entry);
     }
-
     os_JSONlogs.data = arrayLogs;
 
     return os_JSONlogs;

@@ -18,24 +18,32 @@
     <div class="jumbotron jumbotron-fluid bg-info">
         <div class="container">
             <h1 class="display-2">Softia Performance Monitoring</h1>
-            <p class="lead">This is a Node training project serving CPU & BDD performance monitoring metrics in a REST API.</p>
+            <p class="lead">This is a Node training project serving CPU & BDD performance monitoring metrics in a REST
+                API.</p>
             <div class="text-left ml-3">
                 <a href="/osjson">
-                    <button type="button" class="btn btn-secondary display-4 text-white text-center">All OS Logs from API</button>
+                    <button type="button" class="btn btn-secondary display-4 text-white text-center">All OS Logs from
+                        API
+                    </button>
                 </a>
                 <a href="/dbjson">
-                    <button type="button" class="btn btn-secondary display-4 text-dark text-center" style="background-color: yellow">All Databases Sizes</button>
+                    <button type="button" class="btn btn-secondary display-4 text-dark text-center"
+                            style="background-color: yellow">All Databases Sizes
+                    </button>
                 </a>
                 <a href="/dbjson/model">
-                    <button type="button" class="btn btn-secondary display-4 text-white text-center">Table Index % and Rows count</button>
+                    <button type="button" class="btn btn-secondary display-4 text-white text-center">Table Index % and
+                        Rows count
+                    </button>
                 </a>
                 <a href="/userlogs">
-                    <button type="button" class="btn btn-secondary display-4 text-dark text-center" style="background-color: yellow">DB User Connections</button>
+                    <button type="button" class="btn btn-secondary display-4 text-dark text-center"
+                            style="background-color: yellow">DB User Connections
+                    </button>
                 </a>
             </div>
         </div>
     </div>
-
 
 
     <div class="jumbotron jumbotron-fluid bg-secondary">
@@ -55,15 +63,20 @@
     <div class="jumbotron jumbotron-fluid bg-secondary">
         <div class="container">
             <h1 class="display-4 text-white">Filter records per dates</h1>
-            <p class="lead text-white">Enter /osjson/date/(Startdate)/(Enddate) in the URL. Date format recommended YYYY-MM-DD</p>
+            <p class="lead text-white">Enter /osjson/date/(Startdate)/(Enddate) in the URL. Date format recommended
+                YYYY-MM-DD</p>
         </div>
     </div>
 
     <div class="jumbotron jumbotron-fluid bg-info">
         <div class="container">
             <h1 class="display-4 text-dark">Wipe the OS data table</h1>
-            <p class="lead text-dark">Enter /osdata/delete in a DELETE request manager. <em class="text-warning">Warning: this will wipe the OS data table.</em></p>
-            <p class="lead text-dark">Enter /osdata/splice in a PUT request manager. <em class="text-warning">Request body must have a 'cutoff' key, its value will be used as cutoff. This will splice the oldest X records in the database, where X = cutoff. The body data must be sent as x-www-form-urlencoded format</em></p>
+            <p class="lead text-dark">Enter /osdata/delete in a DELETE request manager. <em class="text-warning">Warning:
+                    this will wipe the OS data table.</em></p>
+            <p class="lead text-dark">Enter /osdata/splice in a PUT request manager. <em class="text-warning">Request
+                    body must have a 'cutoff' key, its value will be used as cutoff. This will splice the oldest X
+                    records in the database, where X = cutoff. The body data must be sent as x-www-form-urlencoded
+                    format</em></p>
         </div>
     </div>
 
