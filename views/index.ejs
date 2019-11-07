@@ -18,10 +18,19 @@
     <div class="jumbotron jumbotron-fluid bg-info">
         <div class="container">
             <h1 class="display-2">Softia Performance Monitoring</h1>
-            <p class="lead">This is a Node training project delivering CPU & BDD performance monitoring metrics</p>
+            <p class="lead">This is a Node training project serving CPU & BDD performance monitoring metrics in a REST API.</p>
             <div class="text-left ml-3">
                 <a href="/osjson">
                     <button type="button" class="btn btn-secondary display-4 text-white text-center">All OS Logs from API</button>
+                </a>
+                <a href="/dbjson">
+                    <button type="button" class="btn btn-secondary display-4 text-dark text-center" style="background-color: yellow">All Databases Sizes</button>
+                </a>
+                <a href="/dbjson/model">
+                    <button type="button" class="btn btn-secondary display-4 text-dark text-center" style="background-color: yellow">Table Index % and Rows count</button>
+                </a>
+                <a href="/userlogs">
+                    <button type="button" class="btn btn-secondary display-4 text-white text-center">DB User Connections</button>
                 </a>
             </div>
         </div>
@@ -54,6 +63,15 @@
         <div class="container">
             <h1 class="display-4 text-dark">Wipe the OS data table</h1>
             <p class="lead text-dark">Enter /osdata/delete in a PUT request manager. <em class="text-warning">Warning: this will wipe the OS data table.</em></p>
+        </div>
+    </div>
+
+    <div class="jumbotron jumbotron-fluid bg-secondary">
+        <div class="container">
+            <h1 class="display-4 text-white">Additionnal API routes:</h1>
+            <p class="lead text-white">Enter /osjson in the URL to get all OS logs</p>
+            <p class="lead text-white">Enter /dbjson in the URL to get all DB Names and Sizes</p>
+            <p class="lead text-white">Enter /dbjson/model in the URL to this Table Index % usage and Rows count</p>
         </div>
     </div>
 

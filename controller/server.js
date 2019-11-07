@@ -60,5 +60,17 @@ app.get('/dbjson', (request, response) => {
         .catch( (error) => console.log(chalk.redBright(error.message)));
 });
 
+app.get('/dbjson/model', (request, response) => {
+    dbMonitor.getModelMetrics().
+    then( (data) => response.json(data) )
+        .catch( (error) => console.log(chalk.redBright(error.message)));
+});
+
+app.get('/userlogs', (request, response) => {
+    dbMonitor.getUserConnections().
+    then( (data) => response.json(data) )
+        .catch( (error) => console.log(chalk.redBright(error.message)));
+});
+
 const server = app.listen(8060);
 
