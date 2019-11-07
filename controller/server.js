@@ -1,6 +1,7 @@
 const express = require('express');
 const apiMethods = require('../api/osmetrics');
 const dbMethods = require('../api/dbhandler');
+const dbMonitor = require('../api/dbmetrics');
 const app = express();
 const chalk = require('chalk');
 
@@ -51,6 +52,12 @@ app.get('/osjson/date/:startdate/:enddate', (request, response) => { //Returns O
 app.put('/osdata/delete', (request,response) => {
     response.send({type : 'PUT', message : 'Deletion of OS Data Table'});
     dbMethods.wipeOsTable().then(response.redirect('/'));
+});
+
+app.get('/dbjson', (request, response) => {
+    dbMonitor.getDBSizes().
+    then( (data) => response.json(data) )
+        .catch( (error) => console.log(chalk.redBright(error.message)));
 });
 
 const server = app.listen(8060);

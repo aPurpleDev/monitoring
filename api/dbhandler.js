@@ -58,3 +58,4 @@ const wipeOsTable = async() => {
 module.exports.initDB = initDB;
 module.exports.osModel = osModel;
 module.exports.wipeOsTable = wipeOsTable;
+module.exports.sequelize = sequelize;
