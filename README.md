@@ -28,7 +28,7 @@ Note: Please enter date in the YYYY-MM-DD format, also specifiying the time is p
 Note: this is a DELETE request, not accessible by browser. Please use Postman or a similar tool.
 
 '/osdata/splice': Request body must have a 'cutoff' key, its value will be used as cutoff. This will splice the oldest X records in the database, where X = cutoff. The body data must be sent as x-www-form-urlencoded format.
-Note: this is a DELETE request, not accessible by browser. Please use Postman or a similar tool.
+Note: this is a PUT request, not accessible by browser. Please use Postman or a similar tool.
 
 '/dbjson': get all collections Names and Sizes from DB
 

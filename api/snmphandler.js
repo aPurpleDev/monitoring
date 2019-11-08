@@ -1,13 +1,52 @@
 const chalk = require('chalk');
-const snmp = require('snmp-native');
+const dbMethods = require('../api/dbhandler');
 
-const session = new snmp.Session({host: 'localhost', port: 8060});
+const snmp = require('net-snmp');
+const session = snmp.createSession('192.168.10.148', 'public');
+const oids = ['1.3.6.1.2.1.25.2.2.0'];
 
-session.get({oid: [1, 3, 6, 1, 2, 1, 25, 2, 3, 1], community: 'public'}, (error, variables) => { //not working, possibly because snmpwalk is not available on this OS
-    if (error) {
-        console.log(chalk.red('Error fetching OID variables'), error.message);
-    } else {
-        console.log(chalk.greenBright(`${variables[0].oid} = ${variables[0].value} (et de type ${variables[0].type})`));
-    }
+const getTotalRam = () => {
+    let totalRam;
+
+    session.get(oids, (error, varbinds) => {
+        if(error){
+            console.log(chalk.red('error snmp'),error.message);
+        }else{
+            for( let i = 0; i < varbinds.length; i++){
+                if(snmp.isVarbindError(varbinds[i])){
+                    console.error(snmp.varbindError(varbinds[i]))
+                }else {
+                    console.log(varbinds[i].oid + ' = ' + varbinds[i].value);
+                    totalRam = varbinds[i].value;
+                }
+            }
+        }
+        //find a way to close session clean
+    });
+
+    let freeRam;
+
+    session.get(['1.3.6.1.4.1.2021.4.6.0'], (error, varbinds) => {
+        if(error){
+            console.log(chalk.red('error snmp free ram'),error.message);
+        }else{
+            for( let i = 0; i < varbinds.length; i++){
+                if(snmp.isVarbindError(varbinds[i])){
+                    console.error(snmp.varbindError(varbinds[i]))
+                }else {
+                    console.log(varbinds[i].oid + ' = ' + varbinds[i].value);
+                    freeRam = varbinds[i].value;
+                    dbMethods.ramModel.create({FreeRAM: freeRam,TotalRAM: totalRam});
+                }
+            }
+        }
+        //find a way to close session clean
+    })
+};
+
+session.trap(snmp.TrapType.LinkDown, (error) => {
+    if(error)
+        console.error(error);
 });
 
+module.exports.getTotalRam = getTotalRam;

@@ -16,12 +16,12 @@
     "ejs": "^2.7.1",
     "express": "^4.17.1",
     "native": "^0.3.3",
+    "net-snmp": "^1.2.4",
     "node-os-utils": "^1.1.0",
     "os-utils": "0.0.14",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.2",
-    "serve-favicon": "^2.5.0",
-    "snmp-native": "^1.2.0"
+    "serve-favicon": "^2.5.0"
   }
 }
