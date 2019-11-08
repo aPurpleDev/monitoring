@@ -21,7 +21,6 @@
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.2",
-    "serve-favicon": "^2.5.0",
-    "snmp-native": "^1.2.0"
+    "serve-favicon": "^2.5.0"
   }
 }
