@@ -3,7 +3,7 @@ const dbMethods = require('../api/dbhandler');
 
 const snmp = require('net-snmp');
 const session = snmp.createSession('192.168.10.148', 'public');
-const oids = ['1.3.6.1.4.1.2021.4.5.0'];//['1.3.6.1.2.1.25.2.2.0'];
+const oids = ['1.3.6.1.4.1.2021.4.5.0'];
 
 const getTotalRam = () => {
     let totalRam;
@@ -21,12 +21,12 @@ const getTotalRam = () => {
                 }
             }
         }
-        //find a way to close session clean
+        //Can't close SNMP session because SNMP is used every 5 seconds. Session closes when app process is terminated
     });
 
     let freeRam;
 
-    session.get(['1.3.6.1.4.1.2021.4.11.0'], (error, varbinds) => {
+    session.get(['1.3.6.1.4.1.2021.4.11.0'], (error, varbinds) => { //supposed to be freeRam OID data
         if(error){
             console.log(chalk.red('error snmp free ram'),error.message);
         }else{
@@ -40,7 +40,7 @@ const getTotalRam = () => {
                 }
             }
         }
-        //find a way to close session clean
+        //Can't close SNMP session because SNMP is used every 5 seconds. Session closes when app process is terminated
     })
 };
 
@@ -64,5 +64,6 @@ session.trap(snmp.TrapType.LinkDown, (error) => {
 
 module.exports = {
     getTotalRam,
-    selectRAMJSON
+    selectRAMJSON,
+    session
 };
