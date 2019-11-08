@@ -79,10 +79,12 @@ app.put('/osdata/splice', (request, response) => { //Route that deletes X oldest
             dbMethods.removeOsMetrics(cutoff);
             response.json({'message': `Successfully deleted the ${parseInt(cutoff)} oldest records of osmetrics table`});
             }else{
-            response.json({'error':`Enter an Interger number in cutoff value. Input denied`});
+            response.status(400);
+            response.send({'Bad Request Error':`Enter an Interger number in cutoff value for the request to be processed. Input denied`});
             }
     } else {
-        response.json({'error':`No cutoff found, add a "cutoff" key to your request body. Cutoff must be a number`});
+        response.status(400);
+        response.send({'Bad Request Error':`No cutoff found, add a "cutoff" key to your request body for the server to process your request. Cutoff must be a number`});
     }
 });
 

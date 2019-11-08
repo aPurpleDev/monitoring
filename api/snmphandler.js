@@ -3,7 +3,7 @@ const dbMethods = require('../api/dbhandler');
 
 const snmp = require('net-snmp');
 const session = snmp.createSession('192.168.10.148', 'public');
-const oids = ['1.3.6.1.4.1.2021.4.5.0'];//['1.3.6.1.2.1.25.2.2.0'];
+const oids = ['1.3.6.1.2.1.25.2.2.0']; //['1.3.6.1.4.1.2021.4.5.0'];
 
 const getTotalRam = () => {
     let totalRam;
