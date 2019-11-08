@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const apiMethods = require('../api/osmetrics');
 const dbMethods = require('../api/dbhandler');
 const dbMonitor = require('../api/dbmetrics');
+const snmpMethods = require('../api/snmphandler');
 
 const path = require('path');
 
@@ -18,7 +19,13 @@ app.set('view engine', 'ejs'); //EJS handles the homepage '/', which is essentia
 
 app.use(favicon(path.join(__dirname, 'favicon', 'softialogo.ico')));
 
-setInterval(() => apiMethods.getOsMetrics(), 5000); //At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table
+setInterval(() => apiMethods.getOsMetrics(), 5000);//At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table every 5 seconds
+
+try{ //if SNMP doesn't work on the machine, these methods will error
+setInterval( () => snmpMethods.getTotalRam(), 5000 ); //captures total Ram every 5 seconds and insert them into database
+}catch(error){
+    console.log(error.message);
+}
 
 app.get('/', (request, response) => {
     response.render('index.ejs');

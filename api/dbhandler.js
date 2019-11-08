@@ -28,13 +28,24 @@ const osModel = sequelize.define('osmetrics', { //osmetrics table model
     }
 });
 
+const ramModel = sequelize.define('ram', {
+    TotalRAM: {
+        type: Sequelize.BIGINT
+    }
+});
+
 const initDB = () => { //initializes DB connection. Singleton
     if (isDBConnected === false) {
         console.log(chalk.red('Init DB Model if not there, this should appear only once'));
         osModel.sync().then(() => {
             console.log(chalk.blue(`OS Table Sync OK, this should appear only once`));
             isDBConnected = true;
-        }).catch((error) => console.log(chalk.red(`Error syncing Model`, error.message)));
+        }).catch((error) => console.log(chalk.red(`Error syncing OS Model`, error.message)));
+
+        ramModel.sync().then(() => {
+            console.log(chalk.blue(`RAM Table Sync OK, this should appear only once`));
+            isDBConnected = true;
+        }).catch((error) => console.log(chalk.red(`Error syncing RAM Model`, error.message)));
 
         console.log(chalk.red('Init DB sequalize.auth ..'));
         sequelize.authenticate().then(() => console.log(chalk.blue("connection to DB: OK"))).catch((error) => console.log(chalk.red(`Error connecting to DB`, error.message)));
@@ -60,6 +71,7 @@ const removeOsMetrics = async (cutoff) => { //Deletes oldest X records from the 
 
 module.exports.initDB = initDB;
 module.exports.osModel = osModel;
+module.exports.ramModel = ramModel;
 module.exports.wipeOsTable = wipeOsTable;
 module.exports.removeOsMetrics = removeOsMetrics;
 module.exports.sequelize = sequelize;
