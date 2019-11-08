@@ -44,9 +44,23 @@ const getTotalRam = () => {
     })
 };
 
+const selectRAMJSON = async () => { //Select all rammetrics records in database
+    let ram_JSONlogs = {"success": true, "message": "all RAM records in database"};
+    let arrayLogs = [];
+    const data = await dbMethods.ramModel.findAll({raw: true, order: [['id', 'DESC']]});
+
+    for (let entry of data) {
+        arrayLogs.push(entry);
+    }
+    ram_JSONlogs.data = arrayLogs;
+
+    return ram_JSONlogs;
+};
+
 session.trap(snmp.TrapType.LinkDown, (error) => {
     if(error)
         console.error(error);
 });
 
 module.exports.getTotalRam = getTotalRam;
+module.exports.selectRAMJSON = selectRAMJSON;

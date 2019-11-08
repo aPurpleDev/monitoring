@@ -37,6 +37,12 @@ app.get('/osjson', (request, response) => { //Route that select all osmetrics re
     }).catch(e => console.log(e));
 });
 
+app.get('/ramjson', (request, response) => { //Route that select all rammetrics records and serves them in a REST API format (JSON)
+    snmpMethods.selectRAMJSON().then(data => {
+        response.json(data);
+    }).catch(e => console.log(e));
+});
+
 app.get('/osjson/:delimiter', (request, response) => { //Route that returns X most recent records of the osmetrics table, where X = delimeter param of the route.
     apiMethods.selectOsMetrics(request.params.delimiter)
         .then(data => response.json(data))
