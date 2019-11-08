@@ -17,6 +17,10 @@ Server will run at localhost:8060.
 
 '/' : Homepage, with its documentation.
 
+'/osjson' : All osmetrics records in the osmodel table. Rest API.
+
+'/ramjson' : All rammetrics records in the osmodel table. Rest API.
+
 '/osjson/(X)' : Select the latest X amount of osmetrics records in the osmodel table from the database.
 
 '/osjson/cpuusage/(Y)' : Select all osmetrics records where cpu usage was higher than Y.
