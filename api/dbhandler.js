@@ -65,10 +65,10 @@ const wipeOsTable = async () => { //Deletes all records from osmetrics table
 };
 
 const removeOsMetrics = async (cutoff) => { //Deletes oldest X records from the osmetrics table, where X = cutoff.
-    await sequelize.query(`DELETE FROM osmetrics WHERE ctid IN (SELECT ctid FROM osmetrics ORDER BY id LIMIT ${cutoff});`);
+    await sequelize.query(`DELETE FROM osmetrics WHERE ctid IN (SELECT ctid FROM osmetrics ORDER BY id LIMIT :cutoff);`, { replacements: {cutoff: parseInt(cutoff)}, type: sequelize.QueryTypes.SELECT } );
 
-    console.log(chalk.bgRedBright(`Deleted oldest ${cutoff} rows from osmetrics table`));
-    return `Deleted oldest ${cutoff} rows from osmetrics table`;
+    console.log(chalk.bgRedBright(`Deleted oldest ${parseInt(+cutoff)} rows from osmetrics table`));
+    return `Deleted oldest ${parseInt(cutoff)} rows from osmetrics table`;
 };
 
 module.exports.initDB = initDB;

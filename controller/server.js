@@ -19,8 +19,12 @@ app.set('view engine', 'ejs'); //EJS handles the homepage '/', which is essentia
 
 app.use(favicon(path.join(__dirname, 'favicon', 'softialogo.ico')));
 
+dbMethods.initDB();
 setInterval(() => apiMethods.getOsMetrics(), 5000); //At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table
+
+//try catch
 setInterval(() => snmpMethods.getTotalRam(), 5000); //At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table
+
 
 app.get('/', (request, response) => {
     response.render('index.ejs');
@@ -69,10 +73,16 @@ app.delete('/osdata/delete', (request, response) => { //Route that deletes all r
 app.put('/osdata/splice', (request, response) => { //Route that deletes X oldest records from the osmetrics table, where X = value of the 'cutoff' key from the request's body
     if (request.body.hasOwnProperty('cutoff')) {
         let cutoff = request.body.cutoff;
-        dbMethods.removeOsMetrics(cutoff);
-        response.json({'message': `Successfully deleted the ${cutoff} oldest records of osmetrics table`});
+
+        if(!Number.isNaN(parseInt(cutoff))){
+
+            dbMethods.removeOsMetrics(cutoff);
+            response.json({'message': `Successfully deleted the ${parseInt(cutoff)} oldest records of osmetrics table`});
+            }else{
+            response.json({'error':`Enter an Interger number in cutoff value. Input denied`});
+            }
     } else {
-        response.send(`No cutoff found, add a "cutoff" key to your request body. Cutoff must be a number`);
+        response.json({'error':`No cutoff found, add a "cutoff" key to your request body. Cutoff must be a number`});
     }
 });
 

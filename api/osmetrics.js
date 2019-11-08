@@ -8,7 +8,6 @@ const cpu = osu.cpu;
 const dbMethods = require('../api/dbhandler');
 
 const getOsMetrics = async () => { //Called upon server starts. Initialize the DB if not online(Singleton). Collects OS metrics from computer and inserts them in the table
-    dbMethods.initDB();
 
     const metrics = {}; //Stores OS metrics for upcoming insert
 
