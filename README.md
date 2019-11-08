@@ -1,7 +1,7 @@
 # Monitoring Overview
 
 This is a node training projet, its purpose is to monitor system metrics and serve them in a REST API format.
-The project monitors CPU usage and HDD memory usage. 
+The project monitors CPU usage, HDD memory usage and Database statistics. 
 Every 5 seconds, it inserts the data in a Postgres database. 
 Various routes documented below allows user to fetch data. 
 
