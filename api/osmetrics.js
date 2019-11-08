@@ -92,9 +92,10 @@ const getOsByDates = async (startDate, endDate) => { //Select records that were 
     return os_JSONlogs;
 };
 
-module.exports.getOsMetrics = getOsMetrics;
-module.exports.selectOsMetrics = selectOsMetrics;
-module.exports.selectOsJSON = selectOsJSON;
-module.exports.findUsageAbove = findUsageAbove;
-module.exports.getOsByDates = getOsByDates;
-
+module.exports = {
+    getOsMetrics,
+    selectOsMetrics,
+    selectOsJSON,
+    findUsageAbove,
+    getOsByDates
+};

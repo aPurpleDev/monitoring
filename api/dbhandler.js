@@ -71,9 +71,11 @@ const removeOsMetrics = async (cutoff) => { //Deletes oldest X records from the 
     return `Deleted oldest ${parseInt(cutoff)} rows from osmetrics table`;
 };
 
-module.exports.initDB = initDB;
-module.exports.osModel = osModel;
-module.exports.ramModel = ramModel;
-module.exports.wipeOsTable = wipeOsTable;
-module.exports.removeOsMetrics = removeOsMetrics;
-module.exports.sequelize = sequelize;
+module.exports = {
+  initDB,
+  osModel,
+  ramModel,
+  wipeOsTable,
+  removeOsMetrics,
+  sequelize
+};

@@ -38,6 +38,8 @@ const getUserConnections = async () => { //Select records of users who connected
     return db_JSONlogs;
 };
 
-module.exports.getDBSizes = getDBSizes;
-module.exports.getModelMetrics = getModelMetrics;
-module.exports.getUserConnections = getUserConnections;
+module.exports = {
+  getDBSizes,
+  getModelMetrics,
+  getUserConnections
+};
