@@ -2,16 +2,15 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+const path = require('path');
+const favicon = require('serve-favicon');
+
+const chalk = require('chalk');
+
 const apiMethods = require('../api/osmetrics');
 const dbMethods = require('../api/dbhandler');
 const dbMonitor = require('../api/dbmetrics');
 const snmpMethods = require('../api/snmphandler');
-
-const path = require('path');
-
-const favicon = require('serve-favicon');
-
-const chalk = require('chalk');
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -21,12 +20,13 @@ app.use(favicon(path.join(__dirname, 'favicon', 'softialogo.ico')));
 
 dbMethods.initDB();
 setInterval(() => apiMethods.getOsMetrics(), 5000); //At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table
-
-//try catch
+try{
 setInterval(() => snmpMethods.getTotalRam(), 5000); //At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table
+}catch(error){
+    console.log("Error appel de getTotalRam via SNMP: ", error.message);
+}
 
-
-app.get('/', (request, response) => {
+app.get('/', (request, response) => { //Homepage, front with 5 buttons and a documentation
     response.render('index.ejs');
 });
 
@@ -71,6 +71,7 @@ app.delete('/osdata/delete', (request, response) => { //Route that deletes all r
 });
 
 app.put('/osdata/splice', (request, response) => { //Route that deletes X oldest records from the osmetrics table, where X = value of the 'cutoff' key from the request's body
+                                                   //Can also delete X records where cpuUsage was lower than X
     if (request.body.hasOwnProperty('cutoff')) {
         let cutoff = request.body.cutoff;
 
@@ -88,7 +89,7 @@ app.put('/osdata/splice', (request, response) => { //Route that deletes X oldest
             response.json({'message': `Successfully deleted records of cpu usage lower than ${parseInt(request.body.targetUsage)} in osmetrics table`});
         } else {
             response.status(400);
-            response.send({'Bad Request Error': `targetUsage doesn't match acceptable date format. Must be a number`});
+            response.send({'Bad Request Error': `targetUsage doesn't match acceptable format. Must be a number`});
         }
     } else {
         response.status(400);
