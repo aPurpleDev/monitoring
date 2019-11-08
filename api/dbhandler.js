@@ -37,7 +37,7 @@ const ramModel = sequelize.define('rammetrics', {
     }
 });
 
-const initDB = () => { //initializes DB connection. Singleton
+const initDB = () => { //initializes DB connection, called at server start. Singleton
     if (isDBConnected === false) {
         console.log(chalk.red('Init DB Model if not there, this should appear only once'));
         osModel.sync().then(() => {
@@ -86,9 +86,9 @@ const removeOsMetricsWithDate = async (cpuCutoff) => {
 
 module.exports = {
     sequelize,
-    initDB,
     osModel,
     ramModel,
+    initDB,
     wipeOsTable,
     removeOsMetrics,
     removeOsMetricsWithDate,

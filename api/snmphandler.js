@@ -63,7 +63,7 @@ session.trap(snmp.TrapType.LinkDown, (error) => {
 });
 
 module.exports = {
+    session,
     getTotalRam,
-    selectRAMJSON,
-    session
+    selectRAMJSON
 };

@@ -13,13 +13,13 @@ const dbMonitor = require('../api/dbmetrics');
 const snmpMethods = require('../api/snmphandler');
 
 app.use(bodyParser.urlencoded({extended: true}));
-
 app.set('view engine', 'ejs'); //EJS handles the homepage '/', which is essentially a front documentation with 4 buttons to access the simplest routes
-
 app.use(favicon(path.join(__dirname, 'favicon', 'softialogo.ico')));
 
 dbMethods.initDB();
+
 setInterval(() => apiMethods.getOsMetrics(), 5000); //At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table
+
 try{
 setInterval(() => snmpMethods.getTotalRam(), 5000); //At server initialization, initialize DB and starts collecting osmetrics, then inserts them in the osmetrics table
 }catch(error){
@@ -84,7 +84,7 @@ app.put('/osdata/splice', (request, response) => { //Route that deletes X oldest
             response.send({'Bad Request Error': `Enter an Interger number in cutoff value for the request to be processed. Input denied`});
         }
     } else if (request.body.hasOwnProperty('targetUsage')) {
-        if (Date.parse(request.body.targetUsage)) {
+        if (parseInt(request.body.targetUsage)) {
             dbMethods.removeOsMetricsWithDate(request.body.targetUsage).catch((error) => console.log(error));
             response.json({'message': `Successfully deleted records of cpu usage lower than ${parseInt(request.body.targetUsage)} in osmetrics table`});
         } else {
