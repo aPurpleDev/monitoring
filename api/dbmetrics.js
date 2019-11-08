@@ -39,7 +39,7 @@ const getUserConnections = async () => { //Select records of users who connected
 };
 
 module.exports = {
-  getDBSizes,
-  getModelMetrics,
-  getUserConnections
+    getDBSizes,
+    getModelMetrics,
+    getUserConnections
 };

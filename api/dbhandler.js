@@ -65,17 +65,31 @@ const wipeOsTable = async () => { //Deletes all records from osmetrics table
 };
 
 const removeOsMetrics = async (cutoff) => { //Deletes oldest X records from the osmetrics table, where X = cutoff.
-    await sequelize.query(`DELETE FROM osmetrics WHERE ctid IN (SELECT ctid FROM osmetrics ORDER BY id LIMIT :cutoff);`, { replacements: {cutoff: parseInt(cutoff)}, type: sequelize.QueryTypes.SELECT } );
+    await sequelize.query(`DELETE FROM osmetrics WHERE ctid IN (SELECT ctid FROM osmetrics ORDER BY id LIMIT :cutoff);`, {
+        replacements: {cutoff: parseInt(cutoff)},
+        type: sequelize.QueryTypes.SELECT
+    });
 
     console.log(chalk.bgRedBright(`Deleted oldest ${parseInt(+cutoff)} rows from osmetrics table`));
     return `Deleted oldest ${parseInt(cutoff)} rows from osmetrics table`;
 };
 
+const removeOsMetricsWithDate = async (cpuCutoff) => {
+    await sequelize.query(`DELETE FROM osmetrics WHERE "cpuUsage" < :cpuCutoff`, {
+        replacements: {cpuCutoff: parseInt(cpuCutoff)},
+        type: sequelize.QueryTypes.DELETE
+    });
+
+    console.log(chalk.bgRedBright(`Deleted records where cpu usage was below ${parseInt(cpuCutoff)} in the osmetrics table`));
+    return `Deleted records where cpu usage was below ${parseInt(cpuCutoff)} in the osmetrics table`;
+};
+
 module.exports = {
-  initDB,
-  osModel,
-  ramModel,
-  wipeOsTable,
-  removeOsMetrics,
-  sequelize
+    sequelize,
+    initDB,
+    osModel,
+    ramModel,
+    wipeOsTable,
+    removeOsMetrics,
+    removeOsMetricsWithDate,
 };

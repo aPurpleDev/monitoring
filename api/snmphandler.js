@@ -5,17 +5,17 @@ const snmp = require('net-snmp');
 const session = snmp.createSession('192.168.10.148', 'public');
 const oids = ['1.3.6.1.4.1.2021.4.5.0'];
 
-const getTotalRam = () => {
+const getTotalRam = () => { //data may not accurately represent RAM, looking into it
     let totalRam;
 
     session.get(oids, (error, varbinds) => {
-        if(error){
-            console.log(chalk.red('error snmp'),error.message);
-        }else{
-            for( let i = 0; i < varbinds.length; i++){
-                if(snmp.isVarbindError(varbinds[i])){
+        if (error) {
+            console.log(chalk.red('error snmp'), error.message);
+        } else {
+            for (let i = 0; i < varbinds.length; i++) {
+                if (snmp.isVarbindError(varbinds[i])) {
                     console.error(snmp.varbindError(varbinds[i]))
-                }else {
+                } else {
                     console.log(varbinds[i].oid + ' = ' + varbinds[i].value);
                     totalRam = varbinds[i].value;
                 }
@@ -27,16 +27,16 @@ const getTotalRam = () => {
     let freeRam;
 
     session.get(['1.3.6.1.4.1.2021.4.11.0'], (error, varbinds) => { //supposed to be freeRam OID data
-        if(error){
-            console.log(chalk.red('error snmp free ram'),error.message);
-        }else{
-            for( let i = 0; i < varbinds.length; i++){
-                if(snmp.isVarbindError(varbinds[i])){
+        if (error) {
+            console.log(chalk.red('error snmp free ram'), error.message);
+        } else {
+            for (let i = 0; i < varbinds.length; i++) {
+                if (snmp.isVarbindError(varbinds[i])) {
                     console.error(snmp.varbindError(varbinds[i]))
-                }else {
+                } else {
                     console.log(varbinds[i].oid + ' = ' + varbinds[i].value);
                     freeRam = varbinds[i].value;
-                    dbMethods.ramModel.create({FreeRAM: freeRam,TotalRAM: totalRam});
+                    dbMethods.ramModel.create({FreeRAM: freeRam, TotalRAM: totalRam});
                 }
             }
         }
@@ -58,7 +58,7 @@ const selectRAMJSON = async () => { //Select all rammetrics records in database
 };
 
 session.trap(snmp.TrapType.LinkDown, (error) => {
-    if(error)
+    if (error)
         console.error(error);
 });
 

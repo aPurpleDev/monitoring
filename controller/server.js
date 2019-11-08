@@ -74,17 +74,29 @@ app.put('/osdata/splice', (request, response) => { //Route that deletes X oldest
     if (request.body.hasOwnProperty('cutoff')) {
         let cutoff = request.body.cutoff;
 
-        if(!Number.isNaN(parseInt(cutoff))){
+        if (!Number.isNaN(parseInt(cutoff))) {
 
-            dbMethods.removeOsMetrics(cutoff);
+            dbMethods.removeOsMetrics(cutoff).catch((error) => console.log(error));
             response.json({'message': `Successfully deleted the ${parseInt(cutoff)} oldest records of osmetrics table`});
-            }else{
+        } else {
             response.status(400);
-            response.send({'Bad Request Error':`Enter an Interger number in cutoff value for the request to be processed. Input denied`});
-            }
+            response.send({'Bad Request Error': `Enter an Interger number in cutoff value for the request to be processed. Input denied`});
+        }
+    } else if (request.body.hasOwnProperty('targetUsage')) {
+        if (Date.parse(request.body.targetUsage)) {
+            dbMethods.removeOsMetricsWithDate(request.body.targetUsage).catch((error) => console.log(error));
+            response.json({'message': `Successfully deleted records of cpu usage lower than ${parseInt(request.body.targetUsage)} in osmetrics table`});
+        } else {
+            response.status(400);
+            response.send({'Bad Request Error': `targetUsage doesn't match acceptable date format. Must be a number`});
+        }
     } else {
         response.status(400);
-        response.send({'Bad Request Error':`No cutoff found, add a "cutoff" key to your request body for the server to process your request. Cutoff must be a number`});
+        response.send({
+            'Bad Request Error': `No cutoff found or targetDate found. 
+        Add a "cutoff" or "targetDate" key to your request body for the server to process your request. 
+        Cutoff must be a number and targetDate a parsable date format.`
+        });
     }
 });
 
