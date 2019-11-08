@@ -5,7 +5,7 @@ const snmp = require('net-snmp');
 const session = snmp.createSession('192.168.10.148', 'public');
 const oids = ['1.3.6.1.4.1.2021.4.5.0'];
 
-const getTotalRam = () => { //data may not accurately represent RAM, looking into it
+const getTotalRam = () => { //data may not accurately represent RAM, can't find better than http://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.html to fix
     let totalRam;
 
     session.get(oids, (error, varbinds) => {
