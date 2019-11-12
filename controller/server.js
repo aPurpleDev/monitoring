@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -13,6 +14,7 @@ const dbMonitor = require('../api/dbmetrics');
 const snmpMethods = require('../api/snmphandler');
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors());
 app.set('view engine', 'ejs'); //EJS handles the homepage '/', which is essentially a front documentation with 4 buttons to access the simplest routes
 app.use(favicon(path.join(__dirname, 'favicon', 'softialogo.ico')));
 
@@ -47,8 +49,14 @@ app.get('/ramjson', (request, response) => { //Route that select all rammetrics 
     }).catch(e => console.log(e));
 });
 
-app.get('/osjson/:delimiter', (request, response) => { //Route that returns X most recent records of the osmetrics table, where X = delimeter param of the route.
+app.get('/osjson/:delimiter', (request, response) => { //Route that returns X oldes records of the osmetrics table, where X = delimeter param of the route.
     apiMethods.selectOsMetrics(request.params.delimiter)
+        .then(data => response.json(data))
+        .catch((error) => console.log(chalk.red("Error in API OS/Delimeter")));
+});
+
+app.get('/osjson/latest/:delimiter', (request, response) => { //Route that returns X most recent records of the osmetrics table, where X = delimeter param of the route.
+    apiMethods.selectLatestOsMetrics(request.params.delimiter)
         .then(data => response.json(data))
         .catch((error) => console.log(chalk.red("Error in API OS/Delimeter")));
 });

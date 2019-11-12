@@ -41,6 +41,20 @@ const selectOsMetrics = async (limiter) => { //Select latest X records of osmetr
     return os_JSONlogs;
 };
 
+const selectLatestOsMetrics = async (limiter) => { //Select latest X records of osmetrics, where X == limiter
+    const data = await dbMethods.osModel.findAll({limit: limiter, raw: true, order: [
+            ['id', 'DESC']]});
+    let os_JSONlogs = {"success": true, "message": `Last ${limiter} records in database`};
+    let arrayLogs = [];
+
+    for (let entry of data) {
+        arrayLogs.push(entry);
+    }
+    os_JSONlogs.data = arrayLogs;
+
+    return os_JSONlogs;
+};
+
 const selectOsJSON = async () => { //Select all osmetrics records in database
     let os_JSONlogs = {"success": true, "message": "all OS records in database"};
     let arrayLogs = [];
@@ -95,6 +109,7 @@ const getOsByDates = async (startDate, endDate) => { //Select records that were 
 module.exports = {
     getOsMetrics,
     selectOsMetrics,
+    selectLatestOsMetrics,
     selectOsJSON,
     findUsageAbove,
     getOsByDates

@@ -21,7 +21,9 @@ Server will run at localhost:8060.
 
 '/ramjson' : All rammetrics records in the osmodel table. Rest API.
 
-'/osjson/(X)' : Select the latest X amount of osmetrics records in the osmodel table from the database.
+'/osjson/(X)' : Select the oldest X amount of osmetrics records in the osmodel table from the database.
+
+'/osjson/latest/(X)' : Select the newest X amount of osmetrics records in the osmodel table from the database.
 
 '/osjson/cpuusage/(Y)' : Select all osmetrics records where cpu usage was higher than Y.
 
