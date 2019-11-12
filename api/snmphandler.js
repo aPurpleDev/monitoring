@@ -21,7 +21,6 @@ const getTotalRam = () => { //data may not accurately represent RAM, can't find 
                 }
             }
         }
-        //Can't close SNMP session because SNMP is used every 5 seconds. Session closes when app process is terminated
     });
 
     let freeRam;
@@ -40,7 +39,6 @@ const getTotalRam = () => { //data may not accurately represent RAM, can't find 
                 }
             }
         }
-        //Can't close SNMP session because SNMP is used every 5 seconds. Session closes when app process is terminated
     })
 };
 
