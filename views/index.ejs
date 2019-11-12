@@ -81,7 +81,9 @@
                     body must have a 'cutoff' or 'targetUsage' key, its value will be used as cutoff or targetUsage. This will splice the oldest X
                     records in the database, where X = cutoff OR it will splice records where Cpu usage was lower than targetUsage. The body data must be sent as x-www-form-urlencoded
                     format.
-
+                </em></p>
+            <p class="lead text-dark">Enter /osdata/splice/ids in a PUT request manager. <em class="text-warning">Request
+                    body must have an 'ids' key, its values will be used as record ids to remove from the osmetrics table (you can supply any number of ids). There must be a comma between IDS, any space will be ignored.
                 </em></p>
         </div>
     </div>
