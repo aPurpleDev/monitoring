@@ -85,6 +85,8 @@ const removeOsMetricsWithDate = async (cpuCutoff) => {
 };
 
 const removeByIds = (args) => {
+    if(typeof args === 'string')
+    {
     const spliceIds = args.split(',');
     for(let arg of spliceIds){
         sequelize.query(`DELETE FROM osmetrics WHERE "id" = :arg`, {
@@ -94,7 +96,16 @@ const removeByIds = (args) => {
             .then( () => console.log('Removed osmetrics records of ID: ',chalk.underline(arg)) )
             .catch( (error) => console.log('erreur promesse delete splice id routes', error.message));
         }
-
+    }else if(args[Symbol.iterator] === 'function'){
+        for(let arg of args) {
+            sequelize.query(`DELETE FROM osmetrics WHERE "id" = :arg`, {
+                replacements: {arg: parseInt(arg)},
+                type: sequelize.QueryTypes.DELETE
+            })
+                .then( () => console.log('Removed osmetrics records of ID: ',chalk.underline(arg)) )
+                .catch( (error) => console.log('erreur promesse delete splice id routes', error.message));
+        }
+    }
     console.log(chalk.greenBright('End of ...spread operators removers'), args);
 };
 
