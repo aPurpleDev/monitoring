@@ -101,6 +101,22 @@ app.put('/osdata/splice', (request, response) => { //Route that deletes X oldest
     }
 });
 
+app.put('/osdata/splice/ids', (request, response) => { //Route that deletes as many entry as IDs matching in the request body
+    if (request.body.hasOwnProperty('ids')) {
+        let ids = request.body.ids;
+        try{
+        dbMethods.removeByIds(ids);
+        }catch(error)
+        {
+            console.log("Error on try/catch route splcie Ids:", chalk.redBright(error.message));
+        }
+        response.json({'message': `Successfully deleted ids submitted in request: ${ids.toString()}`});
+    }else{
+        response.status(400);
+        response.send({'Bad Request Error': `Enter valid IDs seperated by a comma ',' for the request to be processed. Input denied`});
+    }
+});
+
 app.get('/dbjson', (request, response) => { //Route that selects all collection names and sizes within the database
     dbMonitor.getDBSizes().then((data) => response.json(data))
         .catch((error) => console.log(chalk.redBright(error.message)));

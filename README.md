@@ -28,13 +28,25 @@ Server will run at localhost:8060.
 '/osjson/date/(Startdate)/(Enddate)' : Select all osmetrics record created within the startDate and EndDate.
 Note: Please enter date in the YYYY-MM-DD format, also specifiying the time is possible. Do not use '/' in the params . 
 
+'/dbjson': get all collections Names and Sizes from DB
+
+'/dbjson/model' Get Table Index % usage and Rows count
+
 '/osdata/delete': Drops all record from the osModel table.
 Note: this is a DELETE request, not accessible by browser. Please use Postman or a similar tool.
 
 '/osdata/splice': Request body must have a 'cutoff' or 'targetUsage' key, its value will be used as cutoff or targetUsage. 
+Note: this is a PUT request, not accessible by browser. Please use Postman or a similar tool.
 This will splice the oldest X records in the database, where X = cutoff OR it will splice records where Cpu usage was lower than targetUsage. The body data must be sent as x-www-form-urlencoded format.
 
-'/dbjson': get all collections Names and Sizes from DB
+'/osdata/splice/ids': Initially this route was to demonstrate rest parameters potency in js functions, but the put request is cast as a string in most used-case, so this route now splice any numbers of ids
+supplied provided it respects the following format:
+Request body must have a 'ids' key, its values will be used as record ids to remove from the osmetrics table. There must be a comma between IDS, any space will be ignored.
+Note: this is a PUT request, not accessible by browser. Please use Postman or a similar tool.
+Example of valid request: 
+ids: 614
+ids: 614,624 
+ids: 614,624,669,679 (etc ... input as many IDs as you wish provided there is a comma separating the ids)
 
-'/dbjson/model' Get Table Index % usage and Rows count
+
 

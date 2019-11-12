@@ -84,6 +84,20 @@ const removeOsMetricsWithDate = async (cpuCutoff) => {
     return `Deleted records where cpu usage was below ${parseInt(cpuCutoff)} in the osmetrics table`;
 };
 
+const removeByIds = (args) => {
+    const spliceIds = args.split(',');
+    for(let arg of spliceIds){
+        sequelize.query(`DELETE FROM osmetrics WHERE "id" = :arg`, {
+            replacements: {arg: parseInt(arg)},
+            type: sequelize.QueryTypes.DELETE
+        })
+            .then( () => console.log('Removed osmetrics records of ID: ',chalk.underline(arg)) )
+            .catch( (error) => console.log('erreur promesse delete splice id routes', error.message));
+        }
+
+    console.log(chalk.greenBright('End of ...spread operators removers'), args);
+};
+
 module.exports = {
     sequelize,
     osModel,
@@ -92,4 +106,5 @@ module.exports = {
     wipeOsTable,
     removeOsMetrics,
     removeOsMetricsWithDate,
+    removeByIds
 };
